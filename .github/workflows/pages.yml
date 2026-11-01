@@ -29,6 +29,7 @@ jobs:
       - run: npm run test:site
       - run: npx playwright install --with-deps chromium
       - run: npm run preview > /tmp/portfolio-preview.log 2>&1 &
+      - run: node scripts/wait-preview.mjs
       - run: npm run test:browser
       - uses: actions/configure-pages@v5
         with:

@@ -1,0 +1,17 @@
+{
+  "name": "salimullah-human-systems",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/astro.mjs dev --host 127.0.0.1",
+    "build": "node scripts/astro.mjs build",
+    "preview": "node scripts/astro.mjs preview --host 127.0.0.1",
+    "check": "node scripts/astro.mjs check",
+    "test": "node ./node_modules/tsx/dist/cli.mjs --test tests/*.test.ts",
+    "test:site": "node scripts/check-site.mjs",
+    "test:browser": "node scripts/check-browser.mjs"
+  },
+  "dependencies": { "astro": "^7.4.4", "@fontsource/inter": "^5.2.8", "@fontsource/ibm-plex-mono": "^5.2.7" },
+  "devDependencies": { "@astrojs/check": "^0.9.6", "typescript": "^5.9.3", "tsx": "^4.20.6", "@axe-core/playwright": "^4.10.2", "playwright": "^1.56.1", "cheerio": "^1.1.2", "@types/node": "^24.10.0" }
+}

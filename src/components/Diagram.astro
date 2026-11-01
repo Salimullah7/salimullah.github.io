@@ -1,0 +1,21 @@
+---
+interface Props { kind: 'migration' | 'renewal' | 'regional' | 'batch' | 'analytics' | 'delivery'; compact?: boolean; }
+const { kind, compact = false } = Astro.props;
+const diagrams = {
+  migration: { label: 'Relational migration', steps: ['Source records', 'Map relationships', 'Validate & reconcile', 'Target model'], details: ['People · clubs · credentials', 'Stable identity across entities', 'Exceptions remain visible', 'Relationships preserved'], note: 'Identity and relationships travel together.' },
+  renewal: { label: 'Membership processing', steps: ['Receive file', 'Validate rows', 'Match & process', 'Reconcile results'], details: ['Structured external input', 'Reject ambiguous records', 'Create or renew membership', 'Every row has an outcome'], note: 'A successful transfer is only the beginning.' },
+  regional: { label: 'Multi-source consolidation', steps: ['Regional datasets', 'Normalise fields', 'Resolve identity', 'Unified relationships'], details: ['Different local identifiers', 'Dates · states · attributes', 'Review uncertain matches', 'People · assets · ownership'], note: 'A shared schema does not guarantee shared meaning.' },
+  batch: { label: 'Bulk credential processing', steps: ['Bulk candidates', 'Isolate workload', 'Issue credentials', 'Review outcomes'], details: ['Historical membership data', 'Separate from live processing', 'Control operational effects', 'Reconcile failures'], note: 'Batch operations need their own operational boundaries.' },
+  analytics: { label: 'Analytical extraction', steps: ['Operational data', 'Model joins', 'Check coverage', 'Analytical interface'], details: ['Membership · finance · identity', 'Keep entity meaning intact', 'Count excluded populations', 'Downstream warehouse'], note: 'A query can succeed while silently excluding people.' },
+  delivery: { label: 'Scheduled secure delivery', steps: ['Scheduled run', 'Extract & validate', 'Authenticated transfer', 'Record outcome'], details: ['Background execution', 'SQL data · secret retrieval', 'External service boundary', 'Logs · status · recovery'], note: 'Delivery and acknowledgement are different states.' }
+};
+const diagram = diagrams[kind];
+---
+<figure class:list={['system-diagram', { compact }]}>
+  <div class="diagram-heading"><span class="eyebrow">{diagram.label}</span><span class="diagram-key"><span></span> Conceptual model</span></div>
+  <ol class="flow-steps" aria-label={`${diagram.label} workflow`}>
+    {diagram.steps.map((step, index) => <li><span class="flow-number" aria-hidden="true">0{index + 1}</span><strong>{step}</strong><span class="flow-detail">{diagram.details[index]}</span></li>)}
+  </ol>
+  {!compact && <p class="diagram-insight">{diagram.note}</p>}
+  <figcaption>Original illustrative workflow · Sanitised reconstruction, not a production architecture.</figcaption>
+</figure>

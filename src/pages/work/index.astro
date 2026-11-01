@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { integrations } from '../../data/integrations';
+import { pathTo } from '../../lib/paths';
+const work = (await getCollection('work')).sort((first, second) => first.data.order - second.data.order);
+---
+<Layout title="Engineering work">
+  <div class="wrap page-intro"><p class="eyebrow">Engineering / Selected work</p><h1>Inside the systems.</h1><p class="lead">Data that has to arrive intact. Workflows that need to recover. Integrations that have to agree on what a record means.</p><p>These accounts describe my work at JustGo Technologies. Customers are anonymised, diagrams are conceptual, and individual and shared responsibilities are stated separately.</p></div>
+  <section class="wrap work-list" aria-label="Engineering case studies">{work.map(entry => <article><div><p class="eyebrow">{entry.data.category}</p><h2><a href={pathTo(`work/${entry.id}/`)}>{entry.data.title}</a></h2><p>{entry.data.description}</p><p class="small"><strong>Contribution:</strong> {entry.data.role}</p></div><a class="text-link" href={pathTo(`work/${entry.id}/`)}>Read case study <span aria-hidden="true">↗</span></a></article>)}</section>
+  <section class="wrap section" id="integrations"><p class="eyebrow">Contribution index</p><h2>Where I’ve contributed.</h2><p class="section-description">A compact view of the ecosystem. A named platform identifies a context for my work, not ownership of the whole integration or endorsement by the provider.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable integration contributions"><table><caption>Integration contexts and personal contribution, based on professional accounts</caption><thead><tr><th scope="col">Platform / context</th><th scope="col">Area</th><th scope="col">Contribution</th><th scope="col">Evidence / status</th></tr></thead><tbody>{integrations.map(entry => <tr><th scope="row">{entry.name}</th><td>{entry.category}</td><td>{entry.contribution}</td><td>{entry.status}</td></tr>)}</tbody></table></div><p class="small">Sage, Taja, and other names from early brainstorming are omitted until their individual contribution scope is established. <a href={pathTo('evidence/')}>How evidence is handled</a>.</p></section>
+</Layout>

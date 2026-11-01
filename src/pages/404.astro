@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { pathTo } from '../lib/paths';
+---
+<Layout title="Page not found"><div class="wrap page-intro"><p class="eyebrow">404 / Page not found</p><h1>This path ends here.</h1><p class="lead">The page may have moved. You can return to the portfolio or browse the engineering case studies.</p><a class="button" href={pathTo()}>Back to the homepage ↗</a></div></Layout>

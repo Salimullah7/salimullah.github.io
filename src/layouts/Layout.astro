@@ -1,0 +1,47 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import { pathTo } from '../lib/paths';
+import { profile } from '../data/profile';
+interface Props { title: string; description?: string; }
+const { title, description = 'Md. Salimullah — Technical Services Lead in Data & Integrations. Engineering case studies, published research, and an independent engineering lab.' } = Astro.props;
+const navigation = [['Work', 'work/'], ['Research', 'research/'], ['Lab', 'lab/'], ['Writing', 'writing/'], ['About', 'about/']];
+const canonical = new URL(Astro.url.pathname.replace(/\/404\/$/, '/404.html'), Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title === 'Home' ? 'Md. Salimullah — Human Systems Portfolio' : `${title} · Md. Salimullah`}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#184d42" />
+    {title === 'Page not found' && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href={pathTo('favicon.svg')} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={`${title === 'Home' ? 'Human Systems Portfolio' : title} · Md. Salimullah`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header wrap">
+      <a class="identity" href={pathTo()} aria-label="Md. Salimullah, homepage"><span class="monogram" aria-hidden="true">ms.</span><span>Md. Salimullah<span class="identity-sub">Human Systems Portfolio</span></span></a>
+      <nav aria-label="Main navigation">
+        {navigation.map(([label, target]) => <a href={pathTo(target)} aria-current={Astro.url.pathname.includes(`/${target}`) ? 'page' : undefined}>{label}</a>)}
+        <a class="nav-contact" href={pathTo('contact/')}>Let’s talk <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer wrap">
+      <div><a class="footer-name" href={pathTo()}>Md. Salimullah</a><p>Building reliable systems. Staying curious.</p></div>
+      <nav aria-label="Footer navigation"><a href={pathTo('recognition/')}>Recognition</a><a href={pathTo('evidence/')}>About the evidence</a><a href={`mailto:${profile.email}`}>Email <span aria-hidden="true">↗</span></a></nav>
+      <p class="footer-note">Bangladesh · Content reviewed {profile.updated}</p>
+    </footer>
+  </body>
+</html>

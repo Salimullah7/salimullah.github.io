@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Diagram from '../components/Diagram.astro';
+import { pathTo } from '../lib/paths';
+---
+<Layout title="Engineering lab">
+  <header class="wrap page-intro"><p class="eyebrow">Engineering lab / Independent demonstrations</p><h1>Make the decisions<br /><span>visible.</span></h1><p class="lead">A small, working membership-processing sandbox. Change the input, inspect each decision, and see whether the results reconcile.</p><p>This original educational tool runs entirely in your browser using synthetic data. No files are uploaded and no real memberships are changed.</p></header>
+  <section class="wrap" aria-labelledby="sandbox-title"><h2 id="sandbox-title">Membership processing sandbox</h2><p class="section-description">The synthetic register starts with <code>MEM-001</code> and <code>MEM-002</code>. A renew action must match an existing ID; a create action must use a new ID. Duplicate IDs within a batch are rejected.</p><div class="lab-panel" style="margin-top:28px"><label for="csv-input">CSV input</label><textarea id="csv-input" spellcheck="false" aria-describedby="csv-help">member_id,name,email,action
+MEM-001,Avery Morgan,avery.morgan@example.test,renew
+MEM-003,Sam Lee,sam@example.test,create
+MEM-003,Sam Lee,sam@example.test,create
+MEM-004,Noor Khan,invalid-email,create</textarea><p id="csv-help" class="lab-hint">Required columns: member_id, name, email, action. Actions: create or renew. Maximum 500 records and 100,000 characters. Use only synthetic data.</p><div class="lab-controls"><button class="button" id="run-sandbox" type="button">Process sample <span aria-hidden="true">→</span></button><button class="secondary-button" id="reset-sandbox" type="button">Reset example</button><button class="secondary-button" id="download-results" type="button" disabled>Download results</button></div><p id="lab-status" class="lab-hint" role="status" aria-live="polite">Ready. Each run starts from the same synthetic register.</p><div class="lab-output" id="lab-output"></div><noscript><p class="noscript-note">This sandbox needs JavaScript. With the sample above, the expected outcomes are one renewal, one creation, and two rejections. All case studies remain readable without JavaScript.</p></noscript></div></section>
+  <div class="wrap"><Diagram kind="renewal" /></div>
+  <section class="wrap section question-grid"><article><h2 style="font-size:25px">What this demonstrates</h2><p>Input validation, explicit identity rules, duplicate detection, deterministic row-level outcomes, and reconciliation.</p></article><article><h2 style="font-size:25px">What it leaves open</h2><p>Durable storage, authentication, concurrency, transactional writes, and cross-run idempotency belong to a server-side implementation.</p></article><article><h2 style="font-size:25px">Why build it</h2><p>A compact example makes an engineering decision inspectable. <a href={pathTo('work/renewal-engine/')}>Read the related professional case study</a>.</p></article></section>
+</Layout>
+<script>
+  import { processCsv } from '../lib/renewal';
+  const input = document.querySelector<HTMLTextAreaElement>('#csv-input')!;
+  const status = document.querySelector<HTMLParagraphElement>('#lab-status')!;
+  const output = document.querySelector<HTMLDivElement>('#lab-output')!;
+  const download = document.querySelector<HTMLButtonElement>('#download-results')!;
+  const initial = input.value;
+  let latest: ReturnType<typeof processCsv> | undefined;
+  document.querySelector('#run-sandbox')!.addEventListener('click', () => {
+    output.replaceChildren();
+    status.className = 'lab-hint';
+    try {
+      latest = processCsv(input.value);
+      const summary = document.createElement('div');
+      summary.className = 'result-summary';
+      for (const [label, count] of Object.entries(latest.counts)) {
+        const item = document.createElement('span');
+        item.textContent = `${count} ${label}`;
+        summary.append(item);
+      }
+      const scroll = document.createElement('div');
+      scroll.className = 'table-scroll';
+      scroll.tabIndex = 0;
+      scroll.setAttribute('role', 'region');
+      scroll.setAttribute('aria-label', 'Scrollable processing results');
+      const table = document.createElement('table');
+      const caption = table.createCaption();
+      caption.textContent = 'Row-level processing results';
+      const header = table.createTHead().insertRow();
+      for (const label of ['Row', 'Member ID', 'Name', 'Outcome', 'Reason']) {
+        const cell = document.createElement('th');
+        cell.scope = 'col'; cell.textContent = label; header.append(cell);
+      }
+      const body = table.createTBody();
+      for (const outcome of latest.outcomes) {
+        const row = body.insertRow();
+        for (const value of [outcome.row, outcome.memberId, outcome.name, outcome.status, outcome.reason]) row.insertCell().textContent = String(value);
+      }
+      scroll.append(table); output.append(summary, scroll);
+      status.textContent = `Processed ${latest.outcomes.length} rows. ${latest.counts.created} created, ${latest.counts.renewed} renewed, ${latest.counts.rejected} rejected. Counts reconcile to all input rows.`;
+      download.disabled = false;
+    } catch (error) {
+      latest = undefined; download.disabled = true; status.className = 'lab-error';
+      status.textContent = error instanceof Error ? error.message : 'Unable to process input.';
+    }
+  });
+  document.querySelector('#reset-sandbox')!.addEventListener('click', () => {
+    input.value = initial; output.replaceChildren(); latest = undefined; download.disabled = true;
+    status.className = 'lab-hint'; status.textContent = 'Example reset. Each run starts from the same synthetic register.';
+  });
+  download.addEventListener('click', () => {
+    if (!latest) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(latest, null, 2)], { type: 'application/json' }));
+    const link = document.createElement('a'); link.href = url; link.download = 'synthetic-membership-results.json';
+    link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+</script>

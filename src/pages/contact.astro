@@ -1,0 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { profile } from '../data/profile';
+---
+<Layout title="Contact">
+  <section class="wrap page-intro contact-page"><p class="eyebrow">Contact / Start a conversation</p><h1>Let’s find the<br /><span>interesting question.</span></h1><p class="lead">Research opportunities, technical collaboration, or a thoughtful conversation about reliable data systems—I’d be glad to hear from you.</p><a class="contact-email" href={`mailto:${profile.email}`}>{profile.email} <span aria-hidden="true">↗</span></a><p class="small">Based in Bangladesh · UTC+6</p><div class="contact-topics"><article><h2>Research</h2><p>Healthcare AI, heterogeneous datasets, privacy, and reproducible machine learning.</p></article><article><h2>Engineering</h2><p>Data-intensive systems, integration design, automation, and operational reliability.</p></article></div>{profile.github && <a class="text-link" href={profile.github}>GitHub ↗</a>}{profile.linkedin && <a class="text-link" href={profile.linkedin}>LinkedIn ↗</a>}</section>
+</Layout>

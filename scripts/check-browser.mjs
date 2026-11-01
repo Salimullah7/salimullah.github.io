@@ -8,6 +8,7 @@ import { discoverHtml, normalizeBasePath, projectDirectory, qaDirectory, routeFo
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 390, height: 844 },
+  { name: 'narrow', width: 320, height: 700 },
 ];
 const wcagTags = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'];
 const report = {

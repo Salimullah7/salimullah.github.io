@@ -40,7 +40,7 @@ The external provider remained responsible for its own service and downstream pr
 
 ## Validation and evidence
 
-**Historical account.** The dossier describes the complete service and its principal responsibilities. The career audits refer to a source-level implementation artifact and subsequent automated execution notifications. I reviewed those audit descriptions, not the underlying employer source or every notification. This supports the reported implementation and automated operation without converting the audit into a public code review or an independently verified reliability study.
+**Historical account.** The dossier describes the complete service and its principal responsibilities. The career audits refer to a source-level implementation artifact and subsequent automated execution notifications. The public account draws on those descriptions; the underlying employer source and execution notifications are not published here. These descriptions support the reported implementation and automated operation without constituting a public code review or an independently verified reliability study.
 
 **Proposed public validation.** An independent demonstration could use fictional records, a local simulated recipient, and disposable test credentials. Expected output would be specified before running extraction. Controlled failures could include an unavailable recipient, rejected authentication, an interrupted transfer, and an unsuccessful status update after transmission. Each scenario would define what the operator should see and whether a retry is safe.
 

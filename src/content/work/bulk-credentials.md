@@ -43,7 +43,7 @@ The professional account describes an isolated processing approach for historica
 
 **Proposed public validation.** A separate simulator could compare a shared worker with workers that distinguish live and historical issuance. Fictional tasks would make processing intent, credential creation, and notification decisions visible. Tests could introduce a failed credential request, an interrupted batch, and a repeated task to show how a chosen retry policy affects completion and side effects.
 
-The example would define expected notification behavior before execution and verify that historical work follows that policy. Any queue lengths, delays, or service times would be declared hypothetical inputs. Such a simulator would test its own new design; it would neither recreate the private implementation nor establish historical production performance. The simulator and those checks remain proposed public work.
+The example would define expected notification behavior before execution and verify that simulated historical-issuance tasks follow that policy. Any queue lengths, delays, or service times would be declared hypothetical inputs. Such a simulator would test its own new design; it would neither recreate the private implementation nor establish historical production performance. The simulator and those checks remain proposed public work.
 
 ## Outcome and limitations
 

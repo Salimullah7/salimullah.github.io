@@ -30,17 +30,6 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run preview > /tmp/portfolio-preview.log 2>&1 &
       - run: npm run test:browser
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            try {
-              const { data } = await github.request('GET /repos/{owner}/{repo}/pages', context.repo);
-              if (data.build_type !== 'workflow') {
-                await github.request('PUT /repos/{owner}/{repo}/pages', { ...context.repo, build_type: 'workflow' });
-              }
-            } catch (error) {
-              if (error.status !== 404) throw error;
-            }
       - uses: actions/configure-pages@v5
         with:
           enablement: true
